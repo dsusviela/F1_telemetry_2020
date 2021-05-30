@@ -21,7 +21,7 @@ class DataManager(metaclass=Singleton):
     elif data.header.packetId == PacketID.LAP_DATA:
       session_data_by_index = {}
       for index, participant in enumerate(data.lapData):
-        session_data_by_index[index] = self.parse_participant_data(participant, index)
+        session_data_by_index[index] = self._parse_participant_data(participant, index)
 
       for index, driver_data in session_data_by_index.items():
         if driver_data["position"] != 0:
