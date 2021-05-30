@@ -1,6 +1,5 @@
 import PySimpleGUI as sg
 import datetime
-from lib.constants import AI_DRIVERS_IDS_AND_NAMES
 
 class Window:
   def __init__(self):
@@ -22,8 +21,7 @@ class Window:
   def update_session_layout(self, session_qualyfication):
     for position in session_qualyfication.keys():
       last_lap_time = session_qualyfication[position]["lastLapTime"]
-      driver_id = session_qualyfication[position]["driverId"]
-      driver_name = AI_DRIVERS_IDS_AND_NAMES[int(driver_id)]
+      driver_name = session_qualyfication[position]["name"]
       self.main_window[f"-DRIVER-POS#{position}-"].Update(driver_name)
       self.main_window[f"-DRIVER-TIME#{position}-"].Update(self.__parse_time(last_lap_time))
 

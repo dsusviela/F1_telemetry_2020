@@ -11,18 +11,26 @@ class Singleton(type):
 class DataManager(metaclass=Singleton):
   def __init__(self):
     self.session_qualyfication = {}
-    self.session_ids_by_index = {}
+    self.session_names_by_index = {}
 
   def update_from_packet(self, packet):
     data = unpack_udp_packet(packet)
     if data.header.packetId == PacketID.PARTICIPANTS:
       for index, participant in enumerate(data.participants):
-        self.session_ids_by_index[index] = participant.driverId
+        self.session_names_by_index[index] = participant.name
     elif data.header.packetId == PacketID.LAP_DATA:
       session_data_by_index = {}
       for index, participant in enumerate(data.lapData):
-        session_data_by_index[index] = { "lastLapTime": participant.lastLapTime, "position": participant.carPosition, "driverId": self.session_ids_by_index[index] }
+        session_data_by_index[index] = self.parse_participant_data(participant, index)
 
       for index, driver_data in session_data_by_index.items():
         if driver_data["position"] != 0:
           self.session_qualyfication[driver_data["position"]] = driver_data
+
+  def _parse_participant_data(self, participant, index):
+    return {
+      "lastLapTime": participant.lastLapTime,
+      "position": participant.carPosition,
+      "name": self.session_names_by_index[index],
+      "penalties": participant.penalties
+    }
