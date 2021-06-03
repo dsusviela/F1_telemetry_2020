@@ -17,7 +17,10 @@ class DataManager(metaclass=Singleton):
     data = unpack_udp_packet(packet)
     if data.header.packetId == PacketID.PARTICIPANTS:
       for index, participant in enumerate(data.participants):
-        self.session_names_by_index[index] = participant.name
+        self.session_names_by_index[index] = participant.name.decode(encoding='UTF-8',errors='strict')
+        if participant.aiControlled == 0:
+          self.session_names_by_index[index] += str(participant.raceNumber)
+          print(participant)
     elif data.header.packetId == PacketID.LAP_DATA:
       session_data_by_index = {}
       for index, participant in enumerate(data.lapData):
