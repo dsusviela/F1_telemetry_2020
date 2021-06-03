@@ -15,8 +15,10 @@ class Window:
                 'PROGRESS_DEPTH': 0}
     sg.theme_add_new('MyNewTheme', my_new_theme)
     sg.theme('My New Theme')
-    self.layout = self.__create_initial_layout()
-    self.main_window = sg.Window(title="F1 TELEMETRY APP - Cucu productions", layout=[self.layout], font="Helvetica 18")
+    self.lap_times_layout = self.__create_lap_times_layout_layout()
+    self.lap_times_layout2 = self.__create_lap_times_layout_layout()
+    self.tabgroup = [[sg.Tab('Last lap times', self.lap_times_layout)], [sg.Tab('Last lap times', self.lap_times_layout2)]]
+    self.main_window = sg.Window(title="F1 TELEMETRY APP - Cucu productions", layout=[self.lap_times_layout], font="Helvetica 18")
 
   def render(self):
     return self.main_window.read(timeout=10)
@@ -34,7 +36,7 @@ class Window:
   def __parse_time(self, time):
     return str(datetime.timedelta(seconds=time))[:-3]
 
-  def __create_initial_layout(self):
+  def __create_lap_times_layout_layout(self):
     drivers = []
     times = []
     for i in range(0, 22):
@@ -47,3 +49,6 @@ class Window:
       driver_time = sg.Text(times[index], auto_size_text=False, key=f"-DRIVER-TIME#{index + 1}-")
       driver_names_layout += [[driver_text, driver_time]]
     return driver_names_layout
+  
+  def __create_battles_layout():
+    battle_layout = []
